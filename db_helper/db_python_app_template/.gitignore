@@ -1,0 +1,16 @@
+.venv/
+Archives/
+static/
+template/
+
+*.pyc
+__pycache__/
+
+
+dist/
+build/
+
+.DS_STORE
+
+.env
+_credential.py
