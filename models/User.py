@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 from dbInstance import db
 
 @dataclass
@@ -9,7 +9,6 @@ class User(db.Model):
 
     userid:int = Column(Integer, primary_key=True, autoincrement=True)
     e_mail:str = Column(String(50), unique=True)
-    username:str = Column(String(50))
     user_password:str = Column(String(255))
     full_name:str = Column(String(255))
     last_name:str = Column(String(255))

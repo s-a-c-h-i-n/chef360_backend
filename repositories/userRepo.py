@@ -10,7 +10,3 @@ class UserRepo:
     def login(self, email, password):
         user = User.query.filter_by(e_mail=email, user_password=password).first()
         return user
-    
-    def logout(self, jti, now):
-        db.session.add(TokenBlocklist(jti=jti, created_at=now))
-        db.session.commit()
