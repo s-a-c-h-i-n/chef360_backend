@@ -17,13 +17,3 @@ def login():
             return jsonify(message="Login succeeded!", access_token=access_token)
         else:
             return jsonify(message="Bad email or password"), 401
-
-
-@jwt_required        
-def logout():
-    
-    jti = get_jwt()['jti']
-    now = datetime.now(timezone(-timedelta(5)))
-    UserRepo.logout(jti, now)
-    
-    return jsonify({ "msg" : "Logged out."})
