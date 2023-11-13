@@ -1,18 +1,12 @@
-import os
-import pyodbc
 import datetime
-from _credential import server, driver, username, password
-from dotenv import load_dotenv
 from flask import Flask, redirect, render_template, request, url_for, jsonify
+from _connection import get_conn
 #from typing import Union
 from pydantic import BaseModel
 from flask_pydantic import validate
 
 # Create an instance for the web App
 app = Flask(__name__)
-
-load_dotenv()
-connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
 response = ''
 
 class Customer(BaseModel):
@@ -21,14 +15,6 @@ class Customer(BaseModel):
     phone: str
     email_address: str | None = None #Union[str, None] = None
     priority: int
-    
-def get_conn():
-    print(f'{driver=} \n')
-    dev_connection_string = connection_string.format(drv = driver, svr = server, uid = username, pwd = password)
-    #print(f'{dev_connection_string=}\n')
-    conn = pyodbc.connect(dev_connection_string)
-    return conn
-    
     
 @app.route("/api/create_table_customer", methods=["GET"])
 def create_table_customer():
@@ -58,7 +44,6 @@ def create_table_customer():
         # Table may already exist
         print(f'Error {e}\n')
         return f"Error: {e}", 400
-
 
 @app.route("/api/create_customer/", methods=["POST"])
 def create_customer(item: Customer):
