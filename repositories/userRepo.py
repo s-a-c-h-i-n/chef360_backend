@@ -1,7 +1,8 @@
 from models.User import User
 from dbInstance import db
 from models.Blocklist import TokenBlocklist
-from _credential import server, driver, username, password
+#from _credential import server, driver, username, password
+from _connection import get_conn
 import os
 import pyodbc
 import repositories.stringOperator as stringOperator
@@ -15,23 +16,25 @@ class UserRepo:
         user = User.query.filter_by(e_mail=email, user_password=password).first()
         return user
         
-    def register(self,start, USER_PASSWORD,FULL_NAME,LAST_NAME,E_MAIL,PHONE_NUMBER,REGISTRATION_TIME,LAST_LOGIN_TIME,USER_STATUS,USER_TYPE,COUNTRY,CITY):
-        connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
-        dev_connection_string = connection_string.format(drv=driver, svr=server, uid=username, pwd=password)
-        conn = pyodbc.connect(dev_connection_string)
+    def register(self, USER_PASSWORD,FULL_NAME,LAST_NAME,E_MAIL,PHONE_NUMBER,REGISTRATION_TIME,LAST_LOGIN_TIME,USER_STATUS,USER_TYPE,COUNTRY,CITY):
+        #connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
+        #dev_connection_string = connection_string.format(drv=driver, svr=server, uid=username, pwd=password)
+        #conn = pyodbc.connect(dev_connection_string)
 
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO dbo.USER_PROFILE VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", (
-        start, USER_PASSWORD, FULL_NAME, LAST_NAME, E_MAIL, PHONE_NUMBER, REGISTRATION_TIME,
+        conn = get_conn()
+        cursor = conn.cursor() 
+        cursor.execute("INSERT INTO dbo.USER_PROFILE VALUES(?,?,?,?,?,?,?,?,?,?,?)", (
+        USER_PASSWORD, FULL_NAME, LAST_NAME, E_MAIL, PHONE_NUMBER, REGISTRATION_TIME,
                 LAST_LOGIN_TIME, USER_STATUS, USER_TYPE, COUNTRY, CITY))
         conn.commit()
         return E_MAIL
 
     def getPersonalInfor(self,MAIL):
-        connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
-        dev_connection_string = connection_string.format(drv=driver, svr=server, uid=username, pwd=password)
-        conn = pyodbc.connect(dev_connection_string)
+        #connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
+        #dev_connection_string = connection_string.format(drv=driver, svr=server, uid=username, pwd=password)
+        #conn = pyodbc.connect(dev_connection_string)
 
+        conn = get_conn()
         cursor = conn.cursor()
         row=cursor.execute("SELECT USERID,USER_PASSWORD,FULL_NAME,LAST_NAME,E_MAIL,PHONE_NUMBER,REGISTRATION_TIME,LAST_LOGIN_TIME,USER_STATUS,USER_TYPE,COUNTRY,CITY FROM dbo.USER_PROFILE WHERE E_MAIL=?",MAIL).fetchone()
         if(row is None):
