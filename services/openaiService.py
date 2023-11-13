@@ -1,12 +1,15 @@
 from openai import OpenAI
 from flask import jsonify, request
 from tools.toolbox import HelperTools
+from dotenv import load_dotenv
+import os
 tools=HelperTools()
+load_dotenv()
 request_keys = ['ingredients', 'allergies']
 prompt_request = """Suggest {0} {1} with ingredients including {2}; 
                  considering that I'm allergic to {3}. Provide the results only in Json format."""
 client = OpenAI(
-  api_key=""
+  api_key=os.getenv("OPENAI_APIKEY_RECIPE") 
 )
 def getCompletion(prompt, model="gpt-3.5-turbo-1106"):
     messages = [{"role": "user", "content": prompt}]
