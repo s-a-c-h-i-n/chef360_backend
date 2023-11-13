@@ -1,12 +1,5 @@
 # chef360_backend
 
+* This is a build branch. We will add code to this branch and will eventually use this branch to deploy our app.
 
-
-JWT methos in the tools file.
-
-
-
-- Run:
-	flask run			
-- To debug run:
-	flask --app app.py --debug run
+**Fork from this branch to add any changes!**
