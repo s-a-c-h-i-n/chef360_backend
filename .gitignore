@@ -20,6 +20,8 @@ logs/
 db.sqlite
 
 .venv/
+ai_helper_api/
+db_helper/
 __pycache__/
 dist/
 build/
