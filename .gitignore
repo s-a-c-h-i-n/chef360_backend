@@ -1,15 +1,30 @@
-.venv/
-Archives/
-
-
 *.pyc
 __pycache__/
 
+.env
+_credential.py
 
+.vscode/
+.idea/
+.pycproject/
+.DS_Store
+
+instance/
+
+logs/
+*.log
+db.sqlite
+
+logs/
+*.log
+db.sqlite
+
+__pycache__/
 dist/
 build/
 
-.DS_STORE
+.gitattributes
+.pytest_cache/
+__init__.py
 
-.env
-_credential.py
+node_modules
