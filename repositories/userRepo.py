@@ -13,8 +13,18 @@ class UserRepo:
         pass
 
     def login(self, email, password):
-        user = User.query.filter_by(e_mail=email, user_password=password).first()
-        return user
+        # user = User.query.filter_by(e_mail=email, user_password=password).first()
+        conn = get_conn()
+        cursor = conn.cursor()
+        user = cursor.execute("SELECT E_MAIL, USER_PASSWORD FROM dbo.USER_PROFILE WHERE E_MAIL=?",email).fetchone()
+
+        if user is not None:
+            if password == user[1]:
+                return True
+            else:
+                return False
+        else:
+            return False
         
     def register(self, USER_PASSWORD,FULL_NAME,LAST_NAME,E_MAIL,PHONE_NUMBER,REGISTRATION_TIME,LAST_LOGIN_TIME,USER_STATUS,USER_TYPE,COUNTRY,CITY):
         #connection_string = os.getenv("AZURE_SQL_CONNECTIONSTRING")
