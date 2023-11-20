@@ -4,6 +4,9 @@ import app as app
 from models.User import User
 from repositories.userPreferenceRepo import UserPreferenceRepo
 from repositories.stringOperator import splitUnderscores
+from repositories.userRepo import UserRepo
+
+userRepo=UserRepo()
 userPreferenceRepo = UserPreferenceRepo()
 
 def recipePromptGeneration():
@@ -26,9 +29,10 @@ def recipePromptGeneration():
     try:
         #data = jwt.decode(token, app.config['JWT_SECRET_KEY'], algorithms=["HS256"])
         decoded_token =decode_token(token)
-        current_user = User.query.filter_by(e_mail=decoded_token["sub"]).first()
+        #current_user = User.query.filter_by(e_mail=decoded_token["sub"]).first()
+        current_user=userRepo.getPersonalInfor(decoded_token["sub"])
         
-        if current_user is None:
+        if current_user['code'] == 404:
                 return {
                 "message": "Invalid Authentication token!",
                 "data": None,
@@ -42,8 +46,10 @@ def recipePromptGeneration():
                 "error": str(e)
             }, 500
 
-    user_preference = userPreferenceRepo.getPreference(decoded_token["sub"])
-    allergics=splitUnderscores(user_preference.ALLERGICS)
+    state,user_preference = userPreferenceRepo.getPreference(decoded_token["sub"])
+    allergics=""
+    if state:
+        allergics=splitUnderscores(user_preference.ALLERGICS)
     prompt = """Suggest one recipe for {0} with ingredients including {1} considering that I'm allergic to {2}. 
                 I have these cookware - {3} and want it to be done in about {4} to {5} minutes. Provide the results only in Json format."""
 
