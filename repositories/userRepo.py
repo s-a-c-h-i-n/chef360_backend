@@ -59,7 +59,7 @@ class UserRepo:
         row.REGISTRATION_TIME = row.REGISTRATION_TIME
         row.LAST_LOGIN_TIME = row.LAST_LOGIN_TIME
         row.USER_STATUS = stringOperator.splitUnderscores(row.USER_STATUS)
-        row.USER_TYPE = stringOperator.splitUnderscores(row.USER_TYPE)
+        #row.USER_TYPE = stringOperator.splitUnderscores(row.USER_TYPE)
         row.COUNTRY = stringOperator.splitUnderscores(row.COUNTRY)
         row.CITY = stringOperator.splitUnderscores(row.CITY)
 
@@ -68,16 +68,16 @@ class UserRepo:
             "message":"success",
             "data":{
                 "USERID":row.USERID,
-                "FULL_NAME":row.FULL_NAME,
-                "LAST_NAME": row.LAST_NAME,
-                "E_MAIL": row.E_MAIL,
+                "FULL_NAME":row.FULL_NAME[0],
+                "LAST_NAME": row.LAST_NAME[0],
+                "E_MAIL": row.E_MAIL[0],
                 "PHONE_NUMBER": row.PHONE_NUMBER,
                 "REGISTRATION_TIME": row.REGISTRATION_TIME,
                 "LAST_LOGIN_TIME": row.LAST_LOGIN_TIME,
-                "USER_STATUS": row.USER_STATUS,
+                "USER_STATUS": row.USER_STATUS[0],
                 "USER_TYPE": row.USER_TYPE,
-                "COUNTRY": row.COUNTRY,
-                "CITY": row.CITY,
+                "COUNTRY": row.COUNTRY[0],
+                "CITY": row.CITY[0],
             }
         }
         return ret
