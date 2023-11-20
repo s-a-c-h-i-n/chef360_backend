@@ -11,8 +11,8 @@ userPreferenceRepo = UserPreferenceRepo()
 def getPreference():
     access_token = request.headers["Authorization"].split(" ")[1]
     decoded_token =decode_token(access_token)
-    userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
-    if userPreference:
+    state, userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
+    if state:
         cookware=splitUnderscores(userPreference.COOKWARE)
         allergics=splitUnderscores(userPreference.ALLERGICS)
         ret={
@@ -26,19 +26,18 @@ def getPreference():
         }
         return ret
     else:
-        return errorReturn(400,"This user do not have preference")
+        return errorReturn(404,"Not Found 404 error")
     
 def addPreference():
     data=request.get_json()
     access_token = request.headers["Authorization"].split(" ")[1]
 
     decoded_token =decode_token(access_token)
-    userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
+    state,userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
     cookware=mergeUnderscores(data["cookware"])
     allergics=mergeUnderscores(data["allergics"])
-
-    if userPreference:
-        userPreferenceRepo.updatePreference(userPreference,cookware,allergics)
+    if state:
+        userPreferenceRepo.updatePreference(decoded_token["sub"],cookware,allergics)
     else:
         userPreferenceRepo.addPreference(decoded_token["sub"],cookware,allergics)
     return{

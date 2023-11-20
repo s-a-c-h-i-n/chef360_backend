@@ -10,7 +10,7 @@ request_keys = ['ingredients', 'allergies']
 prompt_request = """Suggest {0} {1} with ingredients including {2}; 
                  considering that I'm allergic to {3}. Provide the results only in Json format."""
 client = OpenAI(
-  api_key=os.getenv("OPENAI_APIKEY_RECIPE") 
+  api_key="123123"
 )
 def getCompletion(prompt, model="gpt-3.5-turbo-1106"):
     messages = [{"role": "user", "content": prompt}]
