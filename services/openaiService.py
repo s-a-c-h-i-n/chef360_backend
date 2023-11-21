@@ -12,15 +12,34 @@ prompt_request = """Suggest {0} {1} with ingredients including {2};
 client = OpenAI(
   api_key=os.getenv("OPENAI_APIKEY_RECIPE")
 )
-def getCompletion(prompt, model="gpt-3.5-turbo-1106"):
-    messages = [{"role": "user", "content": prompt}]
+
+def getCompletion(model="gpt-3.5-turbo-1106"):
+
+    data = request.get_json()
+    prompt = data['prompt']
+
+    messages = [{"role": "user", "content": prompt},    {
+      'role': 'system',
+      'content': 'You are a creative and experienced chef assistant.',
+    }]
     response = client.chat.completions.create(
         model=model,
         messages=messages,
         temperature=0.7,
     )
-  
-    return json.loads(response.choices[0].message.content)
+
+    newdata=json.loads(response.choices[0].message.content)
+
+    while("instructions" not in list(newdata.keys())):
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0.7,
+        )
+        newdata = json.loads(response.choices[0].message.content)
+    newdata["allergies"]=prompt[prompt.find("allergic")+12:prompt.find("I have these cookware")-2]
+
+    return {"prompt":newdata}
 
 def getRecipe(nbrOfResults=1):
     # We will use a json format to send the transaction with all keys: ingredients and allergies.
