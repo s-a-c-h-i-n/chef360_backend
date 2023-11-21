@@ -4,6 +4,7 @@ from tools.toolbox import HelperTools
 from dotenv import load_dotenv
 import os
 import json
+from services.recipeService import recipePromptGeneration
 tools=HelperTools()
 load_dotenv()
 request_keys = ['ingredients', 'allergies']
@@ -16,7 +17,7 @@ client = OpenAI(
 def getCompletion(model="gpt-3.5-turbo-1106"):
 
     data = request.get_json()
-    prompt = data['prompt']
+    prompt=recipePromptGeneration(data)
 
     messages = [{"role": "user", "content": prompt},    {
       'role': 'system',
