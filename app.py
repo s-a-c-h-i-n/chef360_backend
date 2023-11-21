@@ -10,7 +10,7 @@ import os
 from dotenv import load_dotenv
 from dbInstance import db
 from JWTInstance import jwt
-
+from routes.openai import openai_bp
 
 app = Flask(__name__)  # Creating the app
 
@@ -28,7 +28,7 @@ app.register_blueprint(general_bp)
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(preference_bp,url_prefix='/preference')
 app.register_blueprint(recipe_bp,url_prefix='/recipe')
-
+app.register_blueprint(openai_bp,url_prefix='/openai')
 
 if __name__ == '__main__':  # Running the app
     app.run()
