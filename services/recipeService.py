@@ -5,11 +5,12 @@ from models.User import User
 from repositories.userPreferenceRepo import UserPreferenceRepo
 from repositories.stringOperator import splitUnderscores
 from repositories.userRepo import UserRepo
+from repositories.recipeRepo import RecipeRepo
 from _connection import get_conn
-
+import json
 userRepo=UserRepo()
 userPreferenceRepo = UserPreferenceRepo()
-
+recipeRepo=RecipeRepo()
 def recipePromptGeneration(data):
     
     ingredients = data['ingredients']
@@ -55,3 +56,31 @@ def recipePromptGeneration(data):
 
     a=prompt.format(meal, ', '.join(ingredients), ',  '.join(allergics), ', '.join(cookware), time[0], time[1])
     return a
+def storeRecipe():
+    data=request.get_json()
+    recipe = data['recipe']
+    recipe_str=json.dumps(recipe)
+    print(recipe_str)
+    token = request.headers["Authorization"].split(" ")[1]
+    if not token:
+        return {
+            "message" : "Authentication Token is missing!",
+            "data" : None,
+            "error" : "Unauthorized" 
+        }, 401
+    
+    try:
+        decoded_token =decode_token(token)
+        e_mail = decoded_token["sub"]
+        recipeRepo.addRecipe(e_mail,recipe_str)
+        return{
+            "code":200,
+            "message":"Store recipe success"
+        }
+    except Exception as e:
+            return {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e)
+            }, 500
+    
