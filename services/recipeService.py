@@ -10,9 +10,7 @@ from _connection import get_conn
 userRepo=UserRepo()
 userPreferenceRepo = UserPreferenceRepo()
 
-def recipePromptGeneration():
-
-    data = request.get_json()
+def recipePromptGeneration(data):
     
     ingredients = data['ingredients']
     meal = data['meal']
@@ -56,4 +54,4 @@ def recipePromptGeneration():
                 I have these cookware - {3} and want it to be done in about {4} to {5} minutes. Provide the results only in Json format."""
 
     a=prompt.format(meal, ', '.join(ingredients), ',  '.join(allergics), ', '.join(cookware), time[0], time[1])
-    return {"prompt":a}
+    return a
