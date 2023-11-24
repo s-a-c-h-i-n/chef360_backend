@@ -10,4 +10,4 @@ auth_bp.route('/login', methods=['POST'])(login)
 
 auth_bp.route('/register', methods=['POST'])(register)
 
-auth_bp.route('/getPersonalInfor', methods=['POST'])(getPersonalInfor)
+auth_bp.route('/getPersonalInfor', methods=['GET'])(getPersonalInfor)
