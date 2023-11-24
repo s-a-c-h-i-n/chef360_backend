@@ -51,17 +51,13 @@ def register():
 def errorReturn(code,message):
     ret={
             "code":code,
-            "message":message,
-            "data":{
-            }
+            "message":message
         }
     return ret
 
 def getPersonalInfor():
-    argsJson = request.data.decode('utf-8')
-    argsJson = json.loads(argsJson)
-    token=argsJson['token']
-    data,expired,state,message=jwtTool.decodeToken(token)
+    access_token=request.headers["Authorization"].split(" ")[1]
+    data,expired,state,message=jwtTool.decodeToken(access_token)
     if(state==False):
         if(str(message)=="Signature has expired"):
             return errorReturn(401,str(message))
