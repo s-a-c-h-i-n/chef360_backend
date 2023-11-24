@@ -14,7 +14,7 @@ client = OpenAI(
   api_key=os.getenv("OPENAI_APIKEY_RECIPE")
 )
 
-def getCompletion(model="gpt-3.5-turbo-1106"):
+def generateRecipe(model="gpt-3.5-turbo-1106"):
 
     data = request.get_json()
     prompt=recipePromptGeneration(data)
@@ -50,6 +50,6 @@ def getRecipe(nbrOfResults=1):
     
     # Format prompt request to send to chatgpt
     user_request = tools.generate_ai_prompt_msg(prompt_request, nbrOfResults, user_specs)
-    response=getCompletion(user_request)
+    response=generateRecipe(user_request)
     print(response)
     return {"message":response}
