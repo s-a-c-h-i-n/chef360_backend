@@ -15,10 +15,17 @@ client = OpenAI(
 )
 
 def generateRecipe(model="gpt-3.5-turbo-1106"):
-
     data = request.get_json()
     prompt=recipePromptGeneration(data)
-
+    if "allergic" in prompt:
+        prompt=prompt+""" The format is like this example:
+{"allergies":"beef","cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":"1. Preheat the oven to 375°F. ","recipe":"Avocado","time":"15-20 minutes"}
+The JSON response:"""
+    else:
+        prompt = prompt + """ The format is like this example:
+        {"cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":"1. Preheat the oven to 375°F. ","recipe":"Avocado","time":"15-20 minutes"}
+        The JSON response:"""
+      
     messages = [{"role": "user", "content": prompt},    {
       'role': 'system',
       'content': 'You are a creative and experienced chef assistant.',
