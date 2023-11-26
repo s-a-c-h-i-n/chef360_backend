@@ -37,7 +37,7 @@ def register():
 
     result=userRepo.checkRegister(E_MAIL)
     if result!='Good':
-        return result
+        return jsonify(message=result), 400
 
     E_MAIL=userRepo.register(USER_PASSWORD, FULL_NAME, LAST_NAME, E_MAIL, PHONE_NUMBER, REGISTRATION_TIME,
                 LAST_LOGIN_TIME, USER_STATUS, USER_TYPE, COUNTRY, CITY)
