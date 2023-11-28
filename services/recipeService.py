@@ -92,3 +92,64 @@ def storeRecipe():
                 "error": str(e)
             }, 500
     
+def getRecipe():
+    token = request.headers["Authorization"].split(" ")[1]
+    if not token:
+        return {
+            "message" : "Authentication Token is missing!",
+            "data" : None,
+            "error" : "Unauthorized" 
+        }, 401
+    
+    try:
+        decoded_token =decode_token(token)
+        e_mail = decoded_token["sub"]
+        state,recipes=recipeRepo.getRecipe(e_mail)
+        if(state):
+
+            print(recipes)
+            print(7)
+            data=[]
+            for i in recipes:
+                print(i)
+                print(type(i))
+                data.append(list(i))
+                #print(json.dumps(i))
+            print(data)
+            print(8)
+            jsonRecipes=pyodbc2Json(recipes)
+            return{
+                "code":200,
+                "message":"success",
+                "data":
+                    jsonRecipes
+                    
+            }
+        else:
+            return{
+                "code":200,
+                "message":"No recipe",
+                "data":""
+            }
+        
+    except Exception as e:
+            return {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e)
+            }, 500
+    
+
+def pyodbc2Json(data):
+    print("in")
+    jsonList=[]
+    k=1
+    for row in data:
+        result={}
+        result['recipe']=json.loads(row[0])
+        result['index']=k
+        k=k+1
+        jsonList.append(result)
+    print(jsonList)
+    return jsonList
+   

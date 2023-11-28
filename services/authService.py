@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 import time
 import re
 import jwtTool
-
+from flask_jwt_extended import decode_token
 userRepo = UserRepo()
 
 def login():
@@ -62,17 +62,25 @@ def errorReturn(code,message):
     return ret
 
 def getPersonalInfor():
-    access_token=request.headers["Authorization"].split(" ")[1]
-    data,expired,state,message=jwtTool.decodeToken(access_token)
-    if(state==False):
-        if(str(message)=="Signature has expired"):
-            return errorReturn(401,str(message))
-        return errorReturn(300,str(message))
-    if expired==True:
-        return errorReturn(401,"This user already expired")
-
-    result=userRepo.getPersonalInfor(data['sub'])
-    if result['code']==200:
-        return result
-    else:
-        return errorReturn(404,"Not found")
+    token=request.headers["Authorization"].split(" ")[1]
+    if not token:
+        return {
+            "message" : "Authentication Token is missing!",
+            "data" : None,
+            "error" : "Unauthorized" 
+        }, 401
+    
+    try:
+        decoded_token =decode_token(token)
+        e_mail = decoded_token["sub"]
+        result=userRepo.getPersonalInfor(e_mail)
+        if result['code']==200:
+            return result
+        else:
+            return errorReturn(404,"Not found")
+    except Exception as e:
+            return {
+                "message": "Something went wrong",
+                "data": None,
+                "error": str(e)
+            }, 500
