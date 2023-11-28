@@ -16,6 +16,15 @@ class RecipeRepo:
         conn.commit()
         return email
 
+    def getRecipe(self,email):
+        conn = get_conn()
+        cursor = conn.cursor()
+        recipes = cursor.execute("SELECT RECIPEINFO FROM dbo.RECIPE WHERE E_MAIL=?",email).fetchall()
+
+        if recipes is not None:
+            return True,recipes
+        else:
+            return False,None
 
 
         
