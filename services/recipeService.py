@@ -60,7 +60,7 @@ def recipePromptGeneration(data):
         return a
     else:
         prompt = """Suggest one recipe for {0} with ingredients including {1}. 
-                 I have these cookware - {3} and want it to be done in about {4} to {5} minutes. Provide the results only in Json format."""
+                 I have these cookware - {2} and want it to be done in about {3} to {4} minutes. Provide the results only in Json format."""
         a = prompt.format(meal, ', '.join(ingredients), ', '.join(cookware), time[0], time[1])
         return a
         
