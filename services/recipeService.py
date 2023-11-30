@@ -11,7 +11,9 @@ import json
 userRepo=UserRepo()
 userPreferenceRepo = UserPreferenceRepo()
 recipeRepo=RecipeRepo()
+
 def recipePromptGeneration(data):
+    print(f"recipePromptGeneration {data=}\n")
     
     ingredients = data['ingredients']
     meal = data['meal']
