@@ -49,15 +49,16 @@ def recipePromptGeneration(data):
                 "error": str(e)
             }, 500
 
-    if userPreferenceRepo.getPreference(decoded_token["sub"])[1] != None:
-        user_preference = userPreferenceRepo.getPreference(decoded_token["sub"])[1]
+    user_preference = userPreferenceRepo.getPreference(decoded_token["sub"])[1]
+    if user_preference != None:
         allergics=splitUnderscores(user_preference[-1])
+        
+    if allergics is not None and allergics != "":
         prompt = """Suggest one recipe for {0} with ingredients including {1} considering that I'm allergic to {2}. 
                 I have these cookware - {3} and want it to be done in about {4} to {5} minutes. Provide the results only in Json format."""
-
+    
         a=prompt.format(meal, ', '.join(ingredients), ',  '.join(allergics), ', '.join(cookware), time[0], time[1])
         print(f"*(1) prompt {a=}\n")
-
         return a
     else:
         prompt = """Suggest one recipe for {0} with ingredients including {1}. 
