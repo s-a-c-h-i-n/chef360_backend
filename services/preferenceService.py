@@ -26,7 +26,8 @@ def getPreference():
         }
         return ret
     else:
-        return errorReturn(404,"Not Found 404 error")
+        msg = errorReturn(404,"Not Found 404 error")
+        return jsonify(message=msg), 404
     
 def addPreference():
     data=request.get_json()
@@ -44,4 +45,3 @@ def addPreference():
         "code":200,
         "message":"Success"
     }
-
