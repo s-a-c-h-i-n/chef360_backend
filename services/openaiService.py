@@ -14,16 +14,23 @@ client = OpenAI(
   api_key=os.getenv("OPENAI_APIKEY_RECIPE")
 )
 
+def createRecipePrompt():
+    data = request.get_json()
+    prompt=recipePromptGeneration(data)
+    return prompt, 200
+
 def generateRecipe(model="gpt-3.5-turbo-1106"):
     data = request.get_json()
     prompt=recipePromptGeneration(data)
+    print(f"generateRecipe {data=}\n")
+    
     if "allergic" in prompt:
         prompt=prompt+""" The format is like this example:
-{"allergies":"beef","cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":"1. Preheat the oven to 375°F. ","recipe":"Avocado","time":"15-20 minutes"}
+{"allergies":"beef","cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":{"Step-1":"1.step1","Step-2":"2.step2","Step-3":"3.step3","Step-4":"4.step4"},"recipe":"Avocado","time":"15-30minutes"}
 The JSON response:"""
     else:
         prompt = prompt + """ The format is like this example:
-        {"cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":"1. Preheat the oven to 375°F. ","recipe":"Avocado","time":"15-20 minutes"}
+        {"cookware":["Oven","Cooktop"],"ingredients":["1 avocado, sliced","1 cup strawberries, sliced"],"instructions":{"Step-1":"1.step1","Step-2":"2.step2","Step-3":"3.step3","Step-4":"4.step4"},"recipe":"Avocado","time":"15-30minutes"}
         The JSON response:"""
       
     messages = [{"role": "user", "content": prompt},    {
