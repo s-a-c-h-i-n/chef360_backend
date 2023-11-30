@@ -69,8 +69,8 @@ def recipePromptGeneration(data):
         
 def storeRecipe():
     data=request.get_json()
-    recipe = data['recipe']
-    recipe_str=json.dumps(recipe)
+    
+    recipe_str=json.dumps(data)
     print(recipe_str)
     token = request.headers["Authorization"].split(" ")[1]
     if not token:
