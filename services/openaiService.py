@@ -52,7 +52,8 @@ The JSON response:"""
             temperature=0.7,
         )
         newdata = json.loads(response.choices[0].message.content)
-    newdata["allergies"]=prompt[prompt.find("allergic")+12:prompt.find("I have these cookware")-2]
+    if "allergic" in prompt:
+        newdata["allergies"]=prompt[prompt.find("allergic")+12:prompt.find("I have these cookware")-2]
 
     return {"prompt":newdata}
 
