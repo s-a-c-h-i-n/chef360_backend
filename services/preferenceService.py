@@ -35,8 +35,16 @@ def addPreference():
 
     decoded_token =decode_token(access_token)
     state,userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
-    cookware=mergeUnderscores(data["cookware"])
-    allergics=mergeUnderscores(data["allergics"])
+    
+    if "cookware" in data:
+        cookware = mergeUnderscores(data["cookware"])
+    else:
+        cookware= ''
+    if "allergics" in data:
+        allergics = mergeUnderscores(data["allergics"])
+    else:
+        allergics = ''
+        
     if state:
         userPreferenceRepo.updatePreference(decoded_token["sub"],cookware,allergics)
     else:
