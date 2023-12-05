@@ -12,9 +12,17 @@ def getPreference():
     access_token = request.headers["Authorization"].split(" ")[1]
     decoded_token =decode_token(access_token)
     state, userPreference=userPreferenceRepo.getPreference(decoded_token["sub"])
+    cookware=[]
+    allergics=[]
     if state:
-        cookware=splitUnderscores(userPreference.COOKWARE)
-        allergics=splitUnderscores(userPreference.ALLERGICS)
+        if(userPreference.COOKWARE ==""):
+            cookware=[]
+        else:
+            cookware=splitUnderscores(userPreference.COOKWARE)
+        if(userPreference.ALLERGICS==""):
+            allergics=[]
+        else:
+            allergics=splitUnderscores(userPreference.ALLERGICS)
         ret={
             "code":200,
             "message":"Success",
